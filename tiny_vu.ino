@@ -1,8 +1,9 @@
-// --- Version 1.2.1 (Breadboard Final) ---
-// - Audio Processing: Max-Min peak-to-peak to ignore DC offset.
+// --- Version 1.2.2 (March 26, 2026) ---
+// - Audio Processing: Max-Min peak-to-peak to ignore DC offset. Added 3x software gain.
 // - Palette UI: Added 4 distinct color schemes (Classic, Synthwave, Deep Cyan, All Red).
-// - Palette Control: Double-clap state machine to cycle through color schemes.
+// - Palette Control: Double-clap state machine.
 // - Boot Stability: 500ms setup() delay ignores power-on transients.
+// - Audio Scaling: Added 3x SOFTWARE_GAIN and lowered DEAD_BAND to 35 to restore dynamic range for the quieter 9.7mm mic.
 
 #include <Adafruit_NeoPixel.h>
 #include <avr/power.h>
@@ -13,12 +14,13 @@
 #define SAMPLES      20  
 
 #define BRIGHTNESS   15  
-#define DEAD_BAND    48  
+#define DEAD_BAND    35  
 #define INPUT_DIV    1   
+#define SOFTWARE_GAIN 3    // NEW: Multiplier to compensate for the quieter 9.7mm microphone
 
 // --- CLAP DETECTION KNOBS ---
-#define CLAP_THRESHOLD     450  // Requires a very loud clap or a physical tap
-#define CLAP_QUIET_DROP    100  
+#define CLAP_THRESHOLD     150  // CHANGED: Dropped from 450 to catch claps on the quieter mic
+#define CLAP_QUIET_DROP    75   // CHANGED: Dropped from 100 to scale with the smaller signals
 #define CLAP_MIN_INTERVAL  100  
 #define CLAP_MAX_INTERVAL  500  
 
@@ -120,7 +122,17 @@ unsigned int readMicPeak() {
   }
   // ---------------------------------
 
-  if (mag > DEAD_BAND) return mag - DEAD_BAND; 
+  // NEW: Process Deadband and apply Software Gain for Visualizer
+  if (mag > DEAD_BAND) {
+    unsigned int cleanAudio = mag - DEAD_BAND;
+    unsigned int boostedAudio = cleanAudio * SOFTWARE_GAIN;
+    
+    // Prevent the multiplied signal from overflowing the physics math
+    if (boostedAudio > 1023) {
+      return 1023;
+    }
+    return boostedAudio;
+  }
   return 0;
 }
 
