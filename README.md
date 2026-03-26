@@ -5,7 +5,7 @@ A highly responsive, auto-scaling audio visualizer designed for miniature hardwa
 ## Hardware Components
 * **Microcontroller:** ATtiny85 (Running at 8MHz)
 * **Display:** 7x WS2812B NeoPixels
-* **Audio Input:** Analog Electret Microphone Module
+* **Audio Input:** Analog 9.7mm 2-Pin Electret Microphone Module
 * **Power Supply:** CR2032 Coin Cell Battery (3V)
 * **Boost Converter:** Pololu NCP1402 3.3V Step-Up (Essential for preventing coin-cell brownouts)
 * **Capacitor:** 100µF across power lines to smooth peak current draws
