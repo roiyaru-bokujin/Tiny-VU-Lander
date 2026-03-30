@@ -58,8 +58,8 @@ uint32_t VUColor(byte i) {
       default:return strip.Color(255, 0, 125);   // Raspberry (User Tweak)
     }
   } else if (currentScheme == 2) {
-    // --- 3. Deep Cyan Base, Red Peaks Color Scheme ---
-    if (i < 5) return strip.Color(0, 130, 210);  // Deep Cyan
+    // --- 3. Green Base, Red Peaks Color Scheme ---
+    if (i < 5) return strip.Color(0, 255, 0);    // Green
     else return strip.Color(240, 0, 0);          // Red
   } else {
     // --- 4. All Red Color Scheme ---
