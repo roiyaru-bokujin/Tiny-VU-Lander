@@ -25,7 +25,7 @@ Driving NeoPixels and an active microphone from a single CR2032 is an extreme ed
 ## How the Code Works
 * **20x Hardware Gain:** Uses the ATtiny85's differential ADC to heavily amplify quiet ambient audio directly at the hardware level.
 * **Software Gain & Tuned Deadband:** Applies a 3x software multiplier to compensate for the relatively lower-sensitivity 9.7mm microphone. A strict deadband (35) mathematically swallows the Pololu's electrical switching noise before the multiplier is applied, ensuring the LEDs stay pitch black in a silent room.
-* **Interactive Palette UI:** Features an acoustic state machine that detects double-claps (threshold: 150) to cycle the NeoPixels through 4 distinct color schemes (Classic, Synthwave, Deep Cyan with Red Peak, All Red).
+* **Interactive Palette UI:** Features an acoustic state machine that detects double-claps (threshold: 150) to cycle the NeoPixels through 4 distinct color schemes (Classic, Synthwave, Green with Red Peak, All Red).
 * **Fast Auto-Scaling:** A 4x-speed Exponential Moving Average (EMA) tracks the room's volume to dynamically adjust the visual ceiling and floor.
 
 ---
