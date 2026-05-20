@@ -1,22 +1,21 @@
 // --- Version 1.2.2 (March 26, 2026) ---
-// - Audio Processing: Max-Min peak-to-peak to ignore DC offset. Added 3x software gain.
+// - Audio Processing: Max-Min peak-to-peak to ignore DC offset. Added 4x software gain.
 // - Palette UI: Added 4 distinct color schemes (Classic, Synthwave, Deep Cyan, All Red).
 // - Palette Control: Double-clap state machine.
 // - Boot Stability: 500ms setup() delay ignores power-on transients.
-// - Audio Scaling: Added 3x SOFTWARE_GAIN and lowered DEAD_BAND to 35 to restore dynamic range for the quieter 9.7mm mic.
 
 #include <Adafruit_NeoPixel.h>
 #include <avr/power.h>
 
 #define LED_PIN      1
-#define NUM_LEDS     7
+#define NUM_LEDS     10
 #define TOP          (NUM_LEDS + 2)
 #define SAMPLES      20  
 
 #define BRIGHTNESS   15  
 #define DEAD_BAND    35  
 #define INPUT_DIV    1   
-#define SOFTWARE_GAIN 3    // NEW: Multiplier to compensate for the quieter 9.7mm microphone
+#define SOFTWARE_GAIN 4    // NEW: Multiplier to compensate for the quieter 9.7mm microphone
 
 // --- CLAP DETECTION KNOBS ---
 #define CLAP_THRESHOLD     150  // CHANGED: Dropped from 450 to catch claps on the quieter mic
@@ -39,27 +38,33 @@ uint32_t VUColor(byte i) {
     // --- 1. Classic Color Scheme ---
     switch (i) {
       case 0: return strip.Color(90, 165, 0);    // Green-yellow
-      case 1: return strip.Color(150, 105, 0);   // Amber
-      case 2: return strip.Color(210, 45, 0);    // Orange-red
-      case 3: return strip.Color(240, 0, 15);    // Red
-      case 4: return strip.Color(220, 0, 40);    // Ruby Pink
-      case 5: return strip.Color(80, 0, 200);    // Deep Violet
+      case 1: return strip.Color(125, 130, 0);   // Yellow-amber
+      case 2: return strip.Color(150, 105, 0);   // Amber
+      case 3: return strip.Color(210, 45, 0);    // Orange-red
+      case 4: return strip.Color(240, 0, 15);    // Red
+      case 5: return strip.Color(220, 0, 40);    // Ruby Pink
+      case 6: return strip.Color(150, 0, 120);   // Magenta-violet
+      case 7: return strip.Color(80, 0, 200);    // Deep Violet
+      case 8: return strip.Color(70, 0, 198);    // Indigo-violet
       default:return strip.Color(60, 0, 195);    // Blue-violet
     }
   } else if (currentScheme == 1) {
     // --- 2. Smoothed Synthwave Base with Raspberry Peak ---
     switch (i) {
       case 0: return strip.Color(0, 255, 255);   // Pure Cyan
-      case 1: return strip.Color(0, 150, 255);   // Sky Blue 
-      case 2: return strip.Color(20, 50, 255);   // True Blue 
-      case 3: return strip.Color(80, 0, 255);    // Indigo 
-      case 4: return strip.Color(140, 0, 220);   // Violet 
-      case 5: return strip.Color(255, 0, 255);   // Pure Magenta (User Tweak)
+      case 1: return strip.Color(0, 205, 255);   // Cyan-sky
+      case 2: return strip.Color(0, 150, 255);   // Sky Blue 
+      case 3: return strip.Color(20, 50, 255);   // True Blue 
+      case 4: return strip.Color(55, 20, 255);   // Blue-indigo
+      case 5: return strip.Color(80, 0, 255);    // Indigo 
+      case 6: return strip.Color(140, 0, 220);   // Violet 
+      case 7: return strip.Color(200, 0, 235);   // Violet-magenta
+      case 8: return strip.Color(255, 0, 255);   // Pure Magenta (User Tweak)
       default:return strip.Color(255, 0, 125);   // Raspberry (User Tweak)
     }
   } else if (currentScheme == 2) {
     // --- 3. Green Base, Red Peaks Color Scheme ---
-    if (i < 5) return strip.Color(0, 255, 0);    // Green
+    if (i < 7) return strip.Color(0, 255, 0);    // Green
     else return strip.Color(240, 0, 0);          // Red
   } else {
     // --- 4. All Red Color Scheme ---
