@@ -4,7 +4,7 @@ A highly responsive, auto-scaling audio visualizer circuit sculpture. Powered by
 
 ## Hardware Components
 * **Microcontroller:** ATtiny85 (Running at 8MHz)
-* **LED Array:** 7x Adafruit NeoPixel SK6812 (3535) 
+* **LED Array:** 10x Adafruit NeoPixel SK6812 (3535) 
 * **Audio Input:** 9.7mm 2-Pin Analog Electret Capsule
 * **Power Supply:** CR2032 3V Coin Cell Battery
 * **Boost Converter:** Pololu NCP1402 3.3V Step-Up
@@ -20,7 +20,7 @@ Driving NeoPixels and an active microphone from a single CR2032 is an extreme ed
 * **Power & Stability:** The battery feeds the Pololu boost converter. The Pololu's 3.3V `VOUT` powers the ATtiny VCC (Pin 8), the NeoPixels, and the microphone's 10kΩ bias resistor. To prevent massive current spikes from crashing the system, the code hard-caps LED brightness at a maximum of `15`.
 * **Microphone & Audio (Pin 3):** The bare electret capsule's positive pin connects to the 3.3V bias resistor and routes the raw audio through a 1µF AC-coupling capacitor directly into ATtiny Pin 3.
 * **The Reference Hub (Pin 2):** Acts as a 1.65V midpoint. This is built structurally on the IC socket itself using three 10kΩ resistors connecting to VCC (Pin 8), GND (Pin 4), and Pin 3.
-* **Data & Structural Support:** Pin 6 drives the NeoPixel data line. For absolute electrical stability, a 10kΩ reset pull-up bridges Pin 1 to Pin 8, and a 0.1µF decoupling capacitor bridges Pin 8 to Pin 4, both soldered directly to the DIP8 socket.
+* **Data & Structural Support:** The NeoPixel data line is driven by ATtiny85 physical pin `6` (DIP-8 package pin numbering). For absolute electrical stability, a 10kΩ reset pull-up bridges Pin 1 to Pin 8, and a 0.1µF decoupling capacitor bridges Pin 8 to Pin 4, both soldered directly to the DIP8 socket.
 
 ## How the Code Works
 * **20x Hardware Gain:** Uses the ATtiny85's differential ADC to heavily amplify quiet ambient audio directly at the hardware level.
